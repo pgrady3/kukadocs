@@ -60,6 +60,25 @@ Turn the PC on.
 4. Turn the Kuka web socket on. Go to Monitor -> I/O -> Digital Output. You want to turn on RSI_ETH. Hold the deadmans, and press "value".
 
 5. Open the PC RSI Host.
+```
+roslaunch kuka_rsi_hw_interface test_hardware_interface.launch sim:=false
+```
+
+6. Open the RSI listener on the Kuka. Navigate to KRC:\R1\Program and select ros_rsi.src
+
+7. Hold the deadman's, and press the green Run button multiple times. The robot will first move to the start position, and then start the RSI listening loop. The terminal window on the PC should say "Got connection from robot"
+
+8. On the PC, run 
+
+```
+rosrun rqt_joint_trajectory_controller rqt_joint_trajectory_controller
+```
+
+Follow the dialogs, and you should be able to move the robot's joints from the PC!
+
+### Cartesian Control
+
+The next step seems to be setting up a MoveIt package. However, I was too lazy, and left the project at this point, as I no longer needed to use it.
 
 # FAQ
 
@@ -70,3 +89,7 @@ You turned the robot off without the backup battery being charged (I think). The
 ### What is the password?
 
 The administrator password to the robot and to the PC are "kuka"
+
+### I need an URDF
+
+Andrew Price made an URDF, available here. https://github.com/a-price/KR5sixxR650WP_description
