@@ -1,0 +1,95 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{textcomp}
+\usepackage[margin=2.5cm]{geometry}
+
+\usepackage{listings}
+\lstset{language=bash, basicstyle=\footnotesize\ttfamily}
+
+\author{Andrew Price}
+\title{Kuka XML Interface Startup}
+\date{August 18, 2014}
+\begin{document}
+\maketitle
+
+Directions for running the Kuka XML and ROS interface to the KR-5sixx in Henrik’s lab.
+
+\section{Hardware Configuration}
+
+The control computer and robot controller should be connected to the router via an Ethernet cable. Use the port closest to the power button on the robot control box. The IP address of the control computer should be set to \textbf{192.168.1.42} (should be handled by DHCP reservation on router).
+
+\section{Software Configuration}
+
+\subsection{Control Computer Side Running ROS}
+\begin{itemize}
+
+\item On the control computer, you must have a copy of the XML file stored locally. 
+
+\item ROS will be started here first. The ROS node acts as the server. Use the following launch file:
+\begin{lstlisting}
+~/jake/rcs/krc_interface krc_robot_only.launch
+\end{lstlisting}
+
+\end{itemize}
+\subsection{Robot Side Running kuka\_demo.src}
+
+\begin{itemize}
+\item You must first make sure that you are the administrator.
+To do this:
+
+\begin{itemize}
+\item Set the selector switch to the bottom left ‘T’.
+
+\item Go to the configure menu, and under user group you need to be administrator.
+
+\item If not, select bottom buttons and set. The password is \textbf{kuka}
+\end{itemize}
+
+\item Make sure that the socket is turned on
+
+\begin{itemize}
+\item Go to monitor, I/O, Digital output
+
+\item Want ‘1’ to be red or on for output.
+
+\item To change, you must hold the deadman and press the value button.
+\end{itemize}
+
+\item Run correct file
+
+\begin{itemize}
+\item Select the kuka source file from the R1 directory
+
+\item The blue button moves between screens and the yellow button selects
+
+\item Put mode selector to top left (spiral with no dot)
+
+\item Press motor enable (the button with a circle with a ‘1’ in it)
+
+\item Clear out all errors
+
+\item Hold deadman and press green circle with a ‘+’ in it
+
+\item Press run multiple times to get to RSI loop
+\end{itemize}
+\end{itemize}
+
+\subsection{Moving the Arm}
+\begin{itemize}
+\item The topics that are interesting are joint\_space, cart\_space\_smooth, and cart\_space\_direct.
+The smooth gives a cubic spline interpolation between points and is probably better to use.
+
+\item The units are degrees and millimeters.
+The velocity is millimeters per second.
+
+\item To move robot, use
+\begin{lstlisting}
+rostopic pub -1 /kuka_cart_diff_smooth geometry_msgs/Twist "[0,0,0][0,0,0]"
+\end{lstlisting}
+
+\item This represents a move of ‘[x,y,z]’ ‘[yaw,pitch,roll]’ applied in YPR order
+
+\end{itemize}
+\end{document}

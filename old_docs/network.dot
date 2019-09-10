@@ -1,0 +1,37 @@
+digraph g {
+	rankdir=TB;
+	//graph [splines="ortho"];
+
+	internet;
+	router;
+	subgraph cluster_pcs {
+		color="none";
+		node [shape="box"];
+		vision [label="Vision/\nPlanning"];
+		crcl [label="CRCL Server\n192.168.1.42"];
+		robotActrl [label="Robot A\nController"];
+		robotBctrl [label="Robot B\nController"];
+	}
+
+	edge [arrowhead="none" arrowtail="none"];
+	internet->router;
+	router->robotActrl;
+	router->robotBctrl;
+	router->vision;
+	router->crcl;
+
+	edge [style="dotted" constraint="false" dir="both"];
+	vision->crcl;
+
+	crcl->robotActrl;
+	crcl->robotBctrl;
+	
+	node [shape="trapezium"];
+	robotA [label="Robot A"];
+	robotB [label="Robot B"];
+	
+	edge [style="solid" color="black:black" constraint="true" dir="both"];
+	robotActrl->robotA;
+	robotBctrl->robotB;
+
+}
